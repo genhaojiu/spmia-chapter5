@@ -64,18 +64,22 @@ public class LicenseService {
             e.printStackTrace();
         }
     }
-
-    @HystrixCommand(//fallbackMethod = "buildFallbackLicenseList",
-            threadPoolKey = "licenseByOrgThreadPool",
-            threadPoolProperties =
-                    {@HystrixProperty(name = "coreSize",value="30"),
-                     @HystrixProperty(name="maxQueueSize", value="10")},
+//
+//    @HystrixCommand(//fallbackMethod = "buildFallbackLicenseList",
+//            threadPoolKey = "licenseByOrgThreadPool",
+//            threadPoolProperties =
+//                    {@HystrixProperty(name = "coreSize",value="30"),
+//                     @HystrixProperty(name="maxQueueSize", value="10")},
+//            commandProperties={
+//                     @HystrixProperty(name="circuitBreaker.requestVolumeThreshold", value="10"),
+//                     @HystrixProperty(name="circuitBreaker.errorThresholdPercentage", value="75"),
+//                     @HystrixProperty(name="circuitBreaker.sleepWindowInMilliseconds", value="7000"),
+//                     @HystrixProperty(name="metrics.rollingStats.timeInMilliseconds", value="15000"),
+//                     @HystrixProperty(name="metrics.rollingStats.numBuckets", value="5")}
+//    )
+    @HystrixCommand(//12s不超时
             commandProperties={
-                     @HystrixProperty(name="circuitBreaker.requestVolumeThreshold", value="10"),
-                     @HystrixProperty(name="circuitBreaker.errorThresholdPercentage", value="75"),
-                     @HystrixProperty(name="circuitBreaker.sleepWindowInMilliseconds", value="7000"),
-                     @HystrixProperty(name="metrics.rollingStats.timeInMilliseconds", value="15000"),
-                     @HystrixProperty(name="metrics.rollingStats.numBuckets", value="5")}
+                     @HystrixProperty(name="execution.isolation.thread.timeoutIn Milliseconds", value="12000"),}
     )
     public List<License> getLicensesByOrg(String organizationId){
         logger.debug("LicenseService.getLicensesByOrg  Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
