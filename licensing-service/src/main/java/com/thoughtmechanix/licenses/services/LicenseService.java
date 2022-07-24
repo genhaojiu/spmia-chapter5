@@ -79,7 +79,7 @@ public class LicenseService {
 //    )
     // 断路器降级时间间隔12S
     @HystrixCommand(fallbackMethod = "buildFallbackLicenseList",
-    		commandProperties= {@HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="12000")}
+    		commandProperties= {@HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="9000")}
     )
     public List<License> getLicensesByOrg(String organizationId){
         logger.debug("LicenseService.getLicensesByOrg  Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
