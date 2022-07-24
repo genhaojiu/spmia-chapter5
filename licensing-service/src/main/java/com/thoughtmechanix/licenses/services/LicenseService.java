@@ -77,10 +77,7 @@ public class LicenseService {
 //                     @HystrixProperty(name="metrics.rollingStats.timeInMilliseconds", value="15000"),
 //                     @HystrixProperty(name="metrics.rollingStats.numBuckets", value="5")}
 //    )
-    @HystrixCommand(//12s不超时
-    		commandProperties={
-                     @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="12000")}
-    )
+    @HystrixCommand(commandProperties= {@HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="12000")})
     public List<License> getLicensesByOrg(String organizationId){
         logger.debug("LicenseService.getLicensesByOrg  Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
         randomlyRunLong();
