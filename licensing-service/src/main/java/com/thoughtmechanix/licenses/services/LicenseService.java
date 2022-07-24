@@ -64,23 +64,25 @@ public class LicenseService {
             e.printStackTrace();
         }
     }
-//
-//    @HystrixCommand(
-//            threadPoolKey = "licenseByOrgThreadPool",
-//            threadPoolProperties =
-//                    {@HystrixProperty(name = "coreSize",value="30"),
-//                     @HystrixProperty(name="maxQueueSize", value="10")},
-//            commandProperties={
+
+    @HystrixCommand(
+    		fallbackMethod = "buildFallbackLicenseList",
+            threadPoolKey = "licenseByOrgThreadPool",
+            threadPoolProperties =
+                    {@HystrixProperty(name = "coreSize",value="30"),
+                     @HystrixProperty(name="maxQueueSize", value="10")}
+//            ,commandProperties={
+//    				 @HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="9000"),
 //                     @HystrixProperty(name="circuitBreaker.requestVolumeThreshold", value="10"),
 //                     @HystrixProperty(name="circuitBreaker.errorThresholdPercentage", value="75"),
 //                     @HystrixProperty(name="circuitBreaker.sleepWindowInMilliseconds", value="7000"),
 //                     @HystrixProperty(name="metrics.rollingStats.timeInMilliseconds", value="15000"),
 //                     @HystrixProperty(name="metrics.rollingStats.numBuckets", value="5")}
-//    )
-    // 断路器降级时间间隔12S
-    @HystrixCommand(fallbackMethod = "buildFallbackLicenseList",
-    		commandProperties= {@HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="9000")}
     )
+    // 断路器降级时间间隔12S，不会发生超时
+//    @HystrixCommand(fallbackMethod = "buildFallbackLicenseList",
+//    		commandProperties= {@HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="9000")}
+//    )
     public List<License> getLicensesByOrg(String organizationId){
         logger.debug("LicenseService.getLicensesByOrg  Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
         randomlyRunLong();
