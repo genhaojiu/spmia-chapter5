@@ -65,7 +65,7 @@ public class LicenseService {
         }
     }
 //
-//    @HystrixCommand(//fallbackMethod = "buildFallbackLicenseList",
+//    @HystrixCommand(
 //            threadPoolKey = "licenseByOrgThreadPool",
 //            threadPoolProperties =
 //                    {@HystrixProperty(name = "coreSize",value="30"),
@@ -77,8 +77,10 @@ public class LicenseService {
 //                     @HystrixProperty(name="metrics.rollingStats.timeInMilliseconds", value="15000"),
 //                     @HystrixProperty(name="metrics.rollingStats.numBuckets", value="5")}
 //    )
-    // 短路器降级时间间隔12S
-    @HystrixCommand(commandProperties= {@HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="9000")})
+    // 断路器降级时间间隔12S
+    @HystrixCommand(fallbackMethod = "buildFallbackLicenseList",
+    		commandProperties= {@HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds", value="12000")}
+    )
     public List<License> getLicensesByOrg(String organizationId){
         logger.debug("LicenseService.getLicensesByOrg  Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
         randomlyRunLong();
